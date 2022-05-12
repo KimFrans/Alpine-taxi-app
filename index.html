@@ -17,6 +17,9 @@
     <script>
         let passengers = 12;
         let queue
+        let profit
+        let totalPerTrip
+        // let overAllTotalforDay
     </script>
 
     <!-- <div class="container"> -->
@@ -26,12 +29,13 @@
     </div>
 
     <div x-data=" {taxiData: [
-        { destination: 'Makhaza', queue: 12, taxiCount: 0, fare: 12.00 },
-        { destination: 'Belhar', queue: 34, taxiCount: 0, fare: 15.00 },
-        { destination: 'Bellville', queue: 23, taxiCount: 0, fare: 10.00 }]}">
+        { destination: 'Makhaza', queue: 12, taxiCount: 0, fare: 12.00, taxiFareTotal: 0 },
+        { destination: 'Belhar', queue: 34, taxiCount: 0, fare: 15.00, taxiFareTotal: 0 },
+        { destination: 'Bellville', queue: 23, taxiCount: 0, fare: 10.00, taxiFareTotal: 0 }]}">
 
 
         <table class="table">
+            
             <thead>
                 <tr>
                     <th scope="col">destination</th>
@@ -44,7 +48,8 @@
             </thead>
             <tbody>
 
-
+                
+                
                 <template x-for="taxi in taxiData">
                     <tr>
                         <td>
@@ -58,26 +63,27 @@
                             <button class="btn btn-dark btn-sm" @click="taxi.queue++">+</button>
                         </td>
                         <td>
-                            <button class="btn btn-dark" @click="taxi.queue=taxi.queue-passengers, taxi.taxiCount++">Depart</button>
+                            <template x-if="taxi.queue>11">
+                                <button class="btn btn-dark btn-sm" @click="taxi.queue=taxi.queue-passengers, taxi.taxiCount++, taxi.taxiFareTotal=(taxi.fare*passengers)*taxi.taxiCount">Depart</button>
+                            </template>
+                            <template x-if="12>taxi.queue">
+                                <button type="button" class="btn btn-dark btn-sm" disabled @click="taxi.queue=taxi.queue-passengers, taxi.taxiCount++">Depart</button>
+                            </template>
                         </td>
                         <td>
                             <p x-text="taxi.taxiCount"></p>
                         </td>
                         <td>
-                            <p x-text="taxi.fare.toFixed(2)"></p>
+                            R<span x-text="taxi.fare.toFixed(2)"></span>
                         </td>
                         
                         <td>
-                            <p x-text="((taxi.fare*passengers)*taxi.taxiCount).toFixed(2)"></p>
+                            R<span x-text="taxi.taxiFareTotal.toFixed(2)"></span>
                         </td>
                         
                     </tr>
                     
                 </template>
-                <tr>
-
-                </tr>
-
 
 
             </tbody>
@@ -87,16 +93,7 @@
 
     </div>
 
-    <script>
-        function taxiData() {
-            return {
-                taxi: [
-                    { destination: 'Makhaza', queue: 12, taxiCount: 0, fare: 12.00 },
-                    { destination: 'Belhar', queue: 34, taxiCount: 0, fare: 15.00 },
-                    { destination: 'Bellville', queue: 23, taxiCount: 0, fare: 10.00 }]
-            }
-        }
-    </script>
+    
     <!-- </div>     -->
 
 
