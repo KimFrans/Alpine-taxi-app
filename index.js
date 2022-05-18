@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('taxiData', () => ({
 
         // passengers=12,
-    
+        // userMessage='',
 
         increment(taxiObject){
             taxiObject.queue++
@@ -18,6 +18,7 @@ document.addEventListener('alpine:init', () => {
             taxiObject.taxiAvail++
         },
 
+        
         taxiData: Alpine.$persist([
             { destination: 'Makhaza', queue: 12, taxiCount: 0, fare: 12.00, taxiFareTotal: 0, taxiAvail: 3 },
             { destination: 'Belhar', queue: 34, taxiCount: 0, fare: 15.00, taxiFareTotal: 0, taxiAvail: 3 },
@@ -36,7 +37,7 @@ document.addEventListener('alpine:init', () => {
                     if(userFare != ''){
                         if(userQueue != ''){
                             if (this.destinationExists(userDestination) == false) {
-                                if (userDestination.match("^[a-zA-Z]*$")) {
+                                if (userDestination.match("^[a-zA-Z]*$") || userDestination.match("^[a-zA-Z_ ]*$")) {
                                     // if(userFare.match("^[0-9]*$")){
                                         // if(userQueue.match("^[0-9]*$")){
                                             this.taxiData.push({destination:userDestination, queue:userQueue, taxiCount:0, fare:userFare, taxiFareTotal:0, taxiAvail:3})
