@@ -20,17 +20,7 @@
     <script>
         let passengers = 12;
         // let foundData
-        // document.addEventListener('alpine:init', () => {
-        //     Alpine.data('taxiData', () => ({
-        //     taxiData: $persist([
-        //         { destination: 'Makhaza', queue: 12, taxiCount: 0, fare: 12.00, taxiFareTotal: 0, taxiAvail: 3 },
-        //         { destination: 'Belhar', queue: 34, taxiCount: 0, fare: 15.00, taxiFareTotal: 0, taxiAvail: 3 },
-        //         { destination: 'Bellville', queue: 23, taxiCount: 0, fare: 10.00, taxiFareTotal: 0, taxiAvail: 3 }])
-        //     }))
-
-
-        // })
-
+    
     </script>
 
     <!-- <div class="container"> -->
@@ -40,11 +30,14 @@
     </div>
 
     <p>A taxi can only depart if there are 12 or more people in the queue</p>
-    <!-- <p id="snackbar" x-ref="errorMess"></p> -->
+    <p id="snackbar" x-ref="userMessage" x-show="userMessage"></p>
 
 
     <div x-data=" { userDestination: '', userFare: '', userQueue: ''}">
 
+        <strong><p>Total profit for the day: R<span x-text="_.sumBy(taxiData, function(taxi) {return taxi.taxiFareTotal})"></span></p></strong>
+
+        
         <div class="row">
             <div class="col">
                 <div x-data="{ open: false }">
@@ -53,13 +46,12 @@
                     <div x-show="open">
                         <p>Destination: <input class="destination" type="text" x-model="userDestination"></p>
                         <p>Fare: <input type="text" x-model.number="userFare"></p>
-                        <p>Queue: <input type="text" x-model="userQueue"></p>
+                        <p>Queue: <input type="text" x-model.number="userQueue"></p>
                     
-                        <!-- <button @click="$refs.errorMess.innerText">Text</button> -->
+                        <!-- <button @click="$refs.userMessage.innerText=returnMessage()">Text</button> -->
                         
-                        <button type="button" class="btn btn-info btn-sm" @click="
-                            taxiData.push({destination:userDestination, queue:userQueue, taxiCount:0, fare:userFare, taxiFareTotal:0, taxiAvail: 3})
-                            , open = false">Add</button>
+                        <button type="button" class="btn btn-info btn-sm" @click="addDestination(userDestination, userFare, userQueue), open = false">Add
+                        </button>
 
                         
                         
@@ -97,14 +89,15 @@
                         </td>
                         <td>
                             <template x-if="taxi.queue>0">
-                                <button class="btn btn-danger btn-sm" @click="taxi.queue--">-</button>
+                                <button class="btn btn-danger btn-sm" @click="decrement(taxi)">-</button>
                             </template>
                             <template x-if="1>taxi.queue">
                                 <button type="button" class="btn btn-danger btn-sm" disabled
                                     @click="taxi.queue-- ">-</button>
                             </template>
                             <span x-text="taxi.queue"></span>
-                            <button class="btn btn-success btn-sm" @click="taxi.queue++">+</button>
+                            <!-- <button class="btn btn-success btn-sm" @click="taxi.queue++">+</button> -->
+                            <button class="btn btn-success btn-sm" @click="increment(taxi)">+</button>
                         </td>
                         <td>
                             <template x-if="taxi.queue>11 && taxi.taxiAvail>0">
@@ -117,9 +110,11 @@
                             </template>
                         </td>
                         <td>
+                            <!-- <span x-text="taxiCountDepart()"></span> -->
                             <span x-text="taxi.taxiCount"></span>
                         </td>
                         <td>
+                            <!-- R<span x-text="taxiFare()"></span> -->
                             R<span x-text="taxi.fare"></span>
                         </td>
                         <td>
@@ -127,7 +122,8 @@
                         </td>
                         <td>
                             <strong><span x-text="taxi.taxiAvail"></span></strong>
-                            <button class="btn btn-info btn-sm" @click="taxi.taxiAvail++">Add a taxi</button>
+                            <button class="btn btn-info btn-sm" @click="addTaxi(taxi)">Add a taxi</button>
+                            <!-- <button class="btn btn-info btn-sm" @click="taxi.taxiAvail++">Add a taxi</button> -->
                         </td>
 
                     </tr>
